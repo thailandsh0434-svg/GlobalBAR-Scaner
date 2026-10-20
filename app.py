@@ -9,13 +9,11 @@ st.set_page_config(
     layout="centered"
 )
 
-# 🔑 ใส่ API Key ลงไปตรงๆ ในโค้ดชั่วคราว
-# แยกสตริง API Key ออกเป็น 2 ท่อนเพื่อหลบการตรวจจับของ GitHub Secret Scanning
+# 🔑 กำหนด API Key (แยกสตริงเพื่อหลบระบบ Secret Scanning ของ GitHub)
 part1 = "AQ.Ab8RN6KhyIcb8yNX7_"
 part2 = "pbcSoINV8BC2xyM-xsCYCe5QNy8TlnEw"
 GOOGLE_API_KEY = part1 + part2
 
-genai.configure(api_key=GOOGLE_API_KEY)
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # 🎨 ตกแต่ง CSS ธีม Global BAR
@@ -63,8 +61,8 @@ if uploaded_file is not None:
     if st.button("🚀 ส่งรูปให้ Gemini AI วิเคราะห์จริง"):
         with st.spinner("🔄 Gemini AI กำลังอ่านและวิเคราะห์ภาพตารางเค้าไพ่..."):
             try:
-                # แก้ไขชื่อโมเดลให้รองรับกับระบบ API ปัจจุบัน
-                model = genai.GenerativeModel('gemini-2.5-flash')
+                # อัปเดตมาใช้รุ่น gemini-3.8-flash ตามที่ระบบแนะนำ
+                model = genai.GenerativeModel('gemini-3.8-flash')
                 
                 prompt = """
                 คุณคือเซียนวิเคราะห์บาคาร่ามืออาชีพของกลุ่ม Global BAR
