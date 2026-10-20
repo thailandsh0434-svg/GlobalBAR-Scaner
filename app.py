@@ -67,7 +67,7 @@ if uploaded_file is not None:
                     # เรียกใช้งานโมเดล Gemini Vision
                     model = genai.GenerativeModel('gemini-1.5-flash')
                     
-                    prompt = """
+                    model = genai.GenerativeModel('gemini-1.5-flash')
                     คุณคือเซียนวิเคราะห์บาคาร่ามืออาชีพของกลุ่ม Global BAR
                     โปรดดูรูปภาพตารางเค้าไพ่หลายโต๊ะนี้ (เช่น โต๊ะ A, B, C, D...) 
                     แล้ววิเคราะห์ว่า:
