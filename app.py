@@ -1,56 +1,81 @@
-import streamlit as st
-import google.generativeai as genai
-from PIL import Image
 import os
+from PIL import Image
+import google.generativeai as genai
+import streamlit as st
 
 # 1. ตั้งค่าหน้าเว็บ (Page Configuration)
 st.set_page_config(
     page_title="Global BAR - Real AI Baccarat Scanner",
     page_icon="🍸",
     layout="centered",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="collapsed",
 )
 
 # ==========================================
 # 🔒 ระบบตรวจสอบรหัสผ่าน (Password Protection)
 # ==========================================
-def check_password():
-    def password_entered():
-        if st.session_state["password"] == "globalbar2026":
-            st.session_state["password_correct"] = True
-            del st.session_state["password"]
-        else:
-            st.session_state["password_correct"] = False
 
-    if "password_correct" not in st.session_state:
-        st.markdown("<h2 style='text-align: center; color: #00D2FC;'>🔒 Global BAR VIP Security</h2>", unsafe_allow_html=True)
-        st.markdown("<p style='text-align: center; color: #8892B0;'>กรุณาใส่รหัสผ่านเพื่อเข้าใช้งานระบบสแกน</p>", unsafe_allow_html=True)
-        st.text_input("รหัสผ่าน (Password)", type="password", on_change=password_entered, key="password")
-        return False
-        
-    elif not st.session_state["password_correct"]:
-        st.markdown("<h2 style='text-align: center; color: #00D2FC;'>🔒 Global BAR VIP Security</h2>", unsafe_allow_html=True)
-        st.text_input("รหัสผ่าน (Password)", type="password", on_change=password_entered, key="password")
-        st.error("❌ รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง")
-        return False
-        
+
+def check_password():
+  def password_entered():
+    if st.session_state["password"] == "globalbar2026":
+      st.session_state["password_correct"] = True
+      del st.session_state["password"]
     else:
-        return True
+      st.session_state["password_correct"] = False
+
+  if "password_correct" not in st.session_state:
+    st.markdown(
+        "<h2 style='text-align: center; color: #00D2FC;'>🔒 Global BAR VIP"
+        " Security</h2>",
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        "<p style='text-align: center; color: #8892B0;'>กรุณาใส่รหัสผ่านเพื่อเข้าใช้งานระบบสแกน</p>",
+        unsafe_allow_html=True,
+    )
+    st.text_input(
+        "รหัสผ่าน (Password)",
+        type="password",
+        on_change=password_entered,
+        key="password",
+    )
+    return False
+
+  elif not st.session_state["password_correct"]:
+    st.markdown(
+        "<h2 style='text-align: center; color: #00D2FC;'>🔒 Global BAR VIP"
+        " Security</h2>",
+        unsafe_allow_html=True,
+    )
+    st.text_input(
+        "รหัสผ่าน (Password)",
+        type="password",
+        on_change=password_entered,
+        key="password",
+    )
+    st.error("❌ รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง")
+    return False
+
+  else:
+    return True
+
 
 if check_password():
 
-    # 2. ตั้งค่า API Key
-    if "GOOGLE_API_KEY" in st.secrets:
-        GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
-    else:
-        part1 = "AQ.Ab8RN6KhyIcb8yNX7_"
-        part2 = "pbcSoINV8BC2xyM-xsCYCe5QNy8TlnEw"
-        GOOGLE_API_KEY = part1 + part2
+  # 2. ตั้งค่า API Key
+  if "GOOGLE_API_KEY" in st.secrets:
+    GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
+  else:
+    part1 = "AQ.Ab8RN6KhyIcb8yNX7_"
+    part2 = "pbcSoINV8BC2xyM-xsCYCe5QNy8TlnEw"
+    GOOGLE_API_KEY = part1 + part2
 
-    genai.configure(api_key=GOOGLE_API_KEY)
+  genai.configure(api_key=GOOGLE_API_KEY)
 
-    # 3. ตกแต่ง Custom CSS โทน VIP Dark & Neon Blue
-    st.markdown("""
+  # 3. ตกแต่ง Custom CSS โทน VIP Dark & Neon Blue
+  st.markdown(
+      """
         <style>
         .stApp {
             background: radial-gradient(circle at top, #112240 0%, #0A192F 60%, #020C1B 100%);
@@ -122,47 +147,68 @@ if check_password():
             margin-top: 20px;
         }
         </style>
-    """, unsafe_allow_html=True)
+    """,
+      unsafe_allow_html=True,
+  )
 
-    # 4. ส่วนหัวแอป
-    if os.path.exists("logo.png"):
-        col_logo, col_text = st.columns([1, 4])
-        with col_logo:
-            logo = Image.open("logo.png")
-            st.image(logo, width=80)
-        with col_text:
-            st.markdown("""
+  # 4. ส่วนหัวแอป
+  if os.path.exists("logo.png"):
+    col_logo, col_text = st.columns([1, 4])
+    with col_logo:
+      logo = Image.open("logo.png")
+      st.image(logo, width=80)
+    with col_text:
+      st.markdown(
+          """
                 <div style="padding-top: 5px;">
                     <h3 style="margin: 0; color: #00D2FC; letter-spacing: 1.5px; font-weight: 800;">GLOBAL BAR VIP</h3>
                     <p style="margin: 2px 0 0 0; color: #64FFDA; font-size: 0.85rem;">REAL AI VISION SCANNER v2.0</p>
                 </div>
-            """, unsafe_allow_html=True)
-    else:
-        st.markdown("""
+            """,
+          unsafe_allow_html=True,
+      )
+  else:
+    st.markdown(
+        """
             <div class="brand-banner">
                 <h3 style="margin: 0; color: #00D2FC; letter-spacing: 1.5px; font-weight: 800;">🍸 GLOBAL BAR VIP COMMUNITY</h3>
                 <p style="margin: 5px 0 0 0; color: #64FFDA; font-size: 0.85rem;">REAL AI VISION SCANNER v2.0</p>
             </div>
-        """, unsafe_allow_html=True)
+        """,
+        unsafe_allow_html=True,
+    )
 
-    st.markdown("<h2 class='main-title'>🎯 AI Baccarat Real-time Scanner</h2>", unsafe_allow_html=True)
-    st.markdown("<p class='sub-title'>✨ ระบบสแกนและแกะรอยเค้าไพ่เรียลไทม์ผ่าน Gemini AI Vision</p>", unsafe_allow_html=True)
+  st.markdown(
+      "<h2 class='main-title'>🎯 AI Baccarat Real-time Scanner</h2>",
+      unsafe_allow_html=True,
+  )
+  st.markdown(
+      "<p class='sub-title'>✨ ระบบสแกนและแกะรอยเค้าไพ่เรียลไทม์ผ่าน Gemini"
+      " AI Vision</p>",
+      unsafe_allow_html=True,
+  )
 
-    # 5. ส่วนอัปโหลดรูปภาพ & เรียก AI
-    uploaded_file = st.file_uploader("📂 อัปโหลดภาพแคปหน้าจอโต๊ะบาคาร่า (JPG, PNG)", type=["jpg", "jpeg", "png"])
+  # 5. ส่วนอัปโหลดรูปภาพ & เรียก AI
+  uploaded_file = st.file_uploader(
+      "📂 อัปโหลดภาพแคปหน้าจอโต๊ะบาคาร่า (JPG, PNG)", type=["jpg", "jpeg", "png"]
+  )
 
-    if uploaded_file is not None:
-        image = Image.open(uploaded_file)
-        st.image(image, caption="📌 ภาพตารางเค้าไพ่ที่รอการวิเคราะห์", use_container_width=True)
-        st.markdown("---")
-        
-        if st.button("🚀 เริ่มสแกนและวิเคราะห์เค้าไพ่ทันที"):
-            with st.spinner("🔄 Gemini AI กำลังแกะรอยเค้าไพ่และคำนวณอัตราความน่าจะเป็น..."):
-                try:
-                    # ปรับมาใช้รุ่น gemini-1.5-flash ที่รองรับมาตรฐาน
-                    model = genai.GenerativeModel('gemini-1.5-flash')
-                    
-                    prompt = """
+  if uploaded_file is not None:
+    image = Image.open(uploaded_file)
+    st.image(
+        image, caption="📌 ภาพตารางเค้าไพ่ที่รอการวิเคราะห์", use_container_width=True
+    )
+    st.markdown("---")
+
+    if st.button("🚀 เริ่มสแกนและวิเคราะห์เค้าไพ่ทันที"):
+      with st.spinner(
+          "🔄 Gemini AI กำลังแกะรอยเค้าไพ่และคำนวณอัตราความน่าจะเป็น..."
+      ):
+        try:
+          # แก้ไขชื่อโมเดลเป็นรุ่นมาตรฐานที่รองรับการเรียกใช้งานผ่าน SDK ปัจจุบัน
+          model = genai.GenerativeModel("gemini-2.5-flash")
+
+          prompt = """
                     คุณคือผู้เชี่ยวชาญด้านการวิเคราะห์สถิติและรูปแบบข้อมูล (Pattern Recognition) ประจำกลุ่ม VIP
 
 หน้าที่ของคุณคือทำการวิเคราะห์ภาพตารางสถิติและเค้าไพ่ (Roadmaps) จากโต๊ะต่างๆ ที่ผู้ใช้ส่งมา โดยจัดทำรายงานสรุปตามโครงสร้าง ดังนี้:
@@ -181,24 +227,32 @@ if check_password():
 
 โทนเสียง: เป็นกันเอง สุภาพ ให้คำแนะนำเชิงวิเคราะห์สถิติอย่างมืออาชีพ
                     """
-                    
-                    response = model.generate_content([image, prompt])
-                    
-                    st.markdown("""
+
+          response = model.generate_content([image, prompt])
+
+          st.markdown(
+              """
                         <div class="result-box">
                             <h3 style="color: #64FFDA; margin-top: 0;">🎉 ผลการวิเคราะห์จาก Gemini AI Vision</h3>
                             <hr style="border-color: rgba(0,210,252,0.2);">
                         </div>
-                    """, unsafe_allow_html=True)
-                    
-                    st.markdown(response.text)
-                    st.balloons()
-                    
-                except Exception as e:
-                    st.error(f"❌ เกิดข้อผิดพลาดในการประมวลผล: {e}")
+                    """,
+              unsafe_allow_html=True,
+          )
 
-    else:
-        st.info("💡 **คำแนะนำ:** กรอกรหัสผ่านสำเร็จแล้ว สามารถอัปโหลดภาพตารางเค้าไพ่เพื่อเริ่มสแกนได้ทันทีครับ")
+          st.markdown(response.text)
+          st.balloons()
 
-    st.markdown("---")
-    st.caption("⚡ Powered by Gemini Vision AI & Global BAR Community | Real-time Analysis System")
+        except Exception as e:
+          st.error(f"❌ เกิดข้อผิดพลาดในการประมวลผล: {e}")
+
+  else:
+    st.info(
+        "💡 **คำแนะนำ:** กรอกรหัสผ่านสำเร็จแล้ว สามารถอัปโหลดภาพตารางเค้าไพ่เพื่อเริ่มสแกนได้ทันทีครับ"
+    )
+
+  st.markdown("---")
+  st.caption(
+      "⚡ Powered by Gemini Vision AI & Global BAR Community | Real-time"
+      " Analysis System"
+  )
