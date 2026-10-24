@@ -15,34 +15,28 @@ st.set_page_config(
 # 🔒 ระบบตรวจสอบรหัสผ่าน (Password Protection)
 # ==========================================
 def check_password():
-    """Returns True if the user entered the correct password."""
     def password_entered():
-        # ตั้งค่ารหัสผ่านที่คุณต้องการตรงนี้ (สามารถเปลี่ยนได้ตามใจชอบ)
         if st.session_state["password"] == "globalbar2026":
             st.session_state["password_correct"] = True
-            del st.session_state["password"]  # ลบรหัสออกจาก session เพื่อความปลอดภัย
+            del st.session_state["password"]
         else:
             st.session_state["password_correct"] = False
 
     if "password_correct" not in st.session_state:
-        # หน้าต่างกรอกรหัสครั้งแรก
         st.markdown("<h2 style='text-align: center; color: #00D2FC;'>🔒 Global BAR VIP Security</h2>", unsafe_allow_html=True)
         st.markdown("<p style='text-align: center; color: #8892B0;'>กรุณาใส่รหัสผ่านเพื่อเข้าใช้งานระบบสแกน</p>", unsafe_allow_html=True)
         st.text_input("รหัสผ่าน (Password)", type="password", on_change=password_entered, key="password")
         return False
         
     elif not st.session_state["password_correct"]:
-        # กรณีใส่รหัสผิด
         st.markdown("<h2 style='text-align: center; color: #00D2FC;'>🔒 Global BAR VIP Security</h2>", unsafe_allow_html=True)
         st.text_input("รหัสผ่าน (Password)", type="password", on_change=password_entered, key="password")
         st.error("❌ รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง")
         return False
         
     else:
-        # ถ้ารหัสถูกต้อง อนุญาตให้เข้าแอป
         return True
 
-# ทำการเช็ครหัสผ่านก่อน หากผ่านถึงจะรันโค้ดด้านล่างทั้งหมด
 if check_password():
 
     # 2. ตั้งค่า API Key
@@ -130,7 +124,7 @@ if check_password():
         </style>
     """, unsafe_allow_html=True)
 
-    # 4. ส่วนหัวแอป (รองรับการแสดงโลโก้ถ้ามีไฟล์ logo.png)
+    # 4. ส่วนหัวแอป
     if os.path.exists("logo.png"):
         col_logo, col_text = st.columns([1, 4])
         with col_logo:
@@ -165,6 +159,7 @@ if check_password():
         if st.button("🚀 เริ่มสแกนและวิเคราะห์เค้าไพ่ทันที"):
             with st.spinner("🔄 Gemini AI กำลังแกะรอยเค้าไพ่และคำนวณอัตราความน่าจะเป็น..."):
                 try:
+                    # ปรับมาใช้รุ่น gemini-1.5-flash ที่รองรับมาตรฐาน
                     model = genai.GenerativeModel('gemini-1.5-flash')
                     
                     prompt = """
