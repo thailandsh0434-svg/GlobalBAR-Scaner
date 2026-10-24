@@ -201,14 +201,18 @@ if check_password():
     st.markdown("---")
 
     if st.button("🚀 เริ่มสแกนและวิเคราะห์เค้าไพ่ทันที"):
-      with st.spinner(
-          "🔄 Gemini AI กำลังแกะรอยเค้าไพ่และคำนวณอัตราความน่าจะเป็น..."
-      ):
-        try:
-          # แก้ไขชื่อโมเดลเป็นรุ่นมาตรฐานที่รองรับการเรียกใช้งานผ่าน SDK ปัจจุบัน
-          model = genai.GenerativeModel("gemini-2.5-flash")
-
-          prompt = """
+            with st.spinner("🔄 Gemini AI กำลังแกะรอยเค้าไพ่และคำนวณอัตราความน่าจะเป็น..."):
+                try:
+                    # ค้นหาโมเดลที่รองรับ generateContent และรองรับรูปภาพอัตโนมัติ
+                    selected_model_name = 'gemini-1.5-flash'
+                    for m in genai.list_models():
+                        if 'generateContent' in m.supported_generation_methods and ('flash' in m.name or 'pro' in m.name):
+                            selected_model_name = m.name
+                            break
+                    
+                    model = genai.GenerativeModel(selected_model_name)
+                    
+                    prompt = """
                     คุณคือผู้เชี่ยวชาญด้านการวิเคราะห์สถิติและรูปแบบข้อมูล (Pattern Recognition) ประจำกลุ่ม VIP
 
 หน้าที่ของคุณคือทำการวิเคราะห์ภาพตารางสถิติและเค้าไพ่ (Roadmaps) จากโต๊ะต่างๆ ที่ผู้ใช้ส่งมา โดยจัดทำรายงานสรุปตามโครงสร้าง ดังนี้:
@@ -225,34 +229,20 @@ if check_password():
 - จำลองแนวโน้มตามรูปแบบเค้าไพ่ล่วงหน้า 20 ไม้
 - แสดงผลลัพธ์แต่ละไม้ด้วยคำว่า "🔴 แดง" หรือ "🔵 น้ำเงิน" เท่านั้น (เช่น ไม้ที่ 1: 🔴 แดง, ไม้ที่ 2: 🔵 น้ำเงิน)
 
-โทนเสียง: เป็นกันเอง สุภาพ ให้คำแนะนำเชิงวิเคราะห์สถิติอย่างมืออาชีพ
+โทนเสียง:เป็นกันเอง สุภาพ ให้คำแนะนำเชิงวิเคราะห์สถิติอย่างมืออาชีพ
                     """
-
-          response = model.generate_content([image, prompt])
-
-          st.markdown(
-              """
+                    
+                    response = model.generate_content([image, prompt])
+                    
+                    st.markdown("""
                         <div class="result-box">
                             <h3 style="color: #64FFDA; margin-top: 0;">🎉 ผลการวิเคราะห์จาก Gemini AI Vision</h3>
                             <hr style="border-color: rgba(0,210,252,0.2);">
                         </div>
-                    """,
-              unsafe_allow_html=True,
-          )
-
-          st.markdown(response.text)
-          st.balloons()
-
-        except Exception as e:
-          st.error(f"❌ เกิดข้อผิดพลาดในการประมวลผล: {e}")
-
-  else:
-    st.info(
-        "💡 **คำแนะนำ:** กรอกรหัสผ่านสำเร็จแล้ว สามารถอัปโหลดภาพตารางเค้าไพ่เพื่อเริ่มสแกนได้ทันทีครับ"
-    )
-
-  st.markdown("---")
-  st.caption(
-      "⚡ Powered by Gemini Vision AI & Global BAR Community | Real-time"
-      " Analysis System"
-  )
+                    """, unsafe_allow_html=True)
+                    
+                    st.markdown(response.text)
+                    st.balloons()
+                    
+                except Exception as e:
+                    st.error(f"❌ เกิดข้อผิดพลาดในการประมวลผล: {e}")
