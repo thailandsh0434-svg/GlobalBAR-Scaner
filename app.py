@@ -200,17 +200,11 @@ if check_password():
     )
     st.markdown("---")
 
-    if st.button("🚀 เริ่มสแกนและวิเคราะห์เค้าไพ่ทันที"):
+  if st.button("🚀 เริ่มสแกนและวิเคราะห์เค้าไพ่ทันที"):
             with st.spinner("🔄 Gemini AI กำลังแกะรอยเค้าไพ่และคำนวณอัตราความน่าจะเป็น..."):
                 try:
-                    # ค้นหาโมเดลที่รองรับ generateContent และรองรับรูปภาพอัตโนมัติ
-                    selected_model_name = 'gemini-1.5-flash'
-                    for m in genai.list_models():
-                        if 'generateContent' in m.supported_generation_methods and ('flash' in m.name or 'pro' in m.name):
-                            selected_model_name = m.name
-                            break
-                    
-                    model = genai.GenerativeModel(selected_model_name)
+                    # 💡 อัปเดตชื่อโมเดลตามที่ Error แนะนำล่าสุดตรงนี้ครับ
+                    model = genai.GenerativeModel('gemini-2.5-flash') 
                     
                     prompt = """
                     คุณคือผู้เชี่ยวชาญด้านการวิเคราะห์สถิติและรูปแบบข้อมูล (Pattern Recognition) ประจำกลุ่ม VIP
@@ -229,7 +223,7 @@ if check_password():
 - จำลองแนวโน้มตามรูปแบบเค้าไพ่ล่วงหน้า 20 ไม้
 - แสดงผลลัพธ์แต่ละไม้ด้วยคำว่า "🔴 แดง" หรือ "🔵 น้ำเงิน" เท่านั้น (เช่น ไม้ที่ 1: 🔴 แดง, ไม้ที่ 2: 🔵 น้ำเงิน)
 
-โทนเสียง:เป็นกันเอง สุภาพ ให้คำแนะนำเชิงวิเคราะห์สถิติอย่างมืออาชีพ
+โทนเสียง: เป็นกันเอง สุภาพ ให้คำแนะนำเชิงวิเคราะห์สถิติอย่างมืออาชีพ
                     """
                     
                     response = model.generate_content([image, prompt])
