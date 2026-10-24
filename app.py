@@ -204,7 +204,7 @@ if check_password():
             with st.spinner("🔄 Gemini AI กำลังแกะรอยเค้าไพ่และคำนวณอัตราความน่าจะเป็น..."):
                 try:
                     # 💡 อัปเดตชื่อโมเดลตามที่ Error แนะนำล่าสุดตรงนี้ครับ
-                    model = genai.GenerativeModel('gemini-2.5-flash') 
+                    model = genai.GenerativeModel('gemini-3.8-flash') 
                     
                     prompt = """
                     คุณคือผู้เชี่ยวชาญด้านการวิเคราะห์สถิติและรูปแบบข้อมูล (Pattern Recognition) ประจำกลุ่ม VIP
